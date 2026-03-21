@@ -1,0 +1,30 @@
+# Build
+build/
+cmake-build-*/
+out/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# JUCE generated
+JuceLibraryCode/
+
+# Compiled objects
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+
+# VST3 build artifacts
+*.vst3/
+
+# OS files
+Thumbs.db
