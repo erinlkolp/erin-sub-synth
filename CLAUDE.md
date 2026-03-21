@@ -1,6 +1,6 @@
 # Erin Sub Synth
 
-C++17 / JUCE 7.0.12 VST3 synthesizer plugin.
+C++17 / JUCE 8.0.12 VST3 synthesizer plugin.
 
 ## Build
 
