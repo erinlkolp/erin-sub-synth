@@ -102,12 +102,30 @@ juce::AudioProcessorValueTreeState::ParameterLayout ErinSubSynthProcessor::creat
 //==============================================================================
 ErinSubSynthProcessor::ErinSubSynthProcessor()
     : AudioProcessor(BusesProperties()
+          .withInput("Input", juce::AudioChannelSet::stereo(), false)
           .withOutput("Output", juce::AudioChannelSet::stereo(), true)),
       apvts(*this, nullptr, "PARAMETERS", createParameterLayout())
 {
 }
 
 ErinSubSynthProcessor::~ErinSubSynthProcessor() {}
+
+//==============================================================================
+bool ErinSubSynthProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
+{
+    const auto& mainOutput = layouts.getMainOutputChannelSet();
+    const auto& mainInput  = layouts.getMainInputChannelSet();
+
+    if (mainOutput != juce::AudioChannelSet::stereo()
+        && mainOutput != juce::AudioChannelSet::mono())
+        return false;
+
+    if (mainInput != juce::AudioChannelSet::disabled()
+        && mainInput != mainOutput)
+        return false;
+
+    return true;
+}
 
 //==============================================================================
 void ErinSubSynthProcessor::prepareToPlay(double sampleRate, int /*samplesPerBlock*/)

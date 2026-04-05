@@ -41,7 +41,9 @@ jobs:
             libcurl4-openssl-dev
 
       - name: Configure
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+        run: >
+          cmake -B build -DCMAKE_BUILD_TYPE=Release
+          ${{ runner.os == 'macOS' && '"-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0' || '' }}
 
       - name: Build
         run: cmake --build build --config Release -j2
@@ -50,6 +52,10 @@ jobs:
         run: |
           cd build
           ctest --output-on-failure -C Release
+
+      - name: Ad-hoc codesign (macOS)
+        if: runner.os == 'macOS'
+        run: codesign --force --deep --sign - "build/ErinSubSynth_artefacts/Release/VST3/Erin Sub Synth.vst3"
 
       - name: Package VST3 (Unix)
         if: runner.os != 'Windows'
