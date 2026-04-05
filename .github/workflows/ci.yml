@@ -11,16 +11,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest, macos-13]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         include:
           - os: ubuntu-latest
             artifact: linux
           - os: windows-latest
             artifact: windows
           - os: macos-latest
-            artifact: macos-arm64
-          - os: macos-13
-            artifact: macos-x86_64
+            artifact: macos
 
     runs-on: ${{ matrix.os }}
 
@@ -45,7 +43,9 @@ jobs:
             libcurl4-openssl-dev
 
       - name: Configure
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+        run: >
+          cmake -B build -DCMAKE_BUILD_TYPE=Release
+          ${{ runner.os == 'macOS' && '"-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64"' || '' }}
 
       - name: Build
         run: cmake --build build --config Release -j2
